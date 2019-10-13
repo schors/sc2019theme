@@ -1,0 +1,30 @@
+\mode<presentation>
+
+\setbeamertemplate{background}{
+  \begin{tikzpicture}
+  \ifnum\thepage=1\relax%
+   \node[anchor=south west,inner sep=0] at (0,0) {\includegraphics[width=\the\paperwidth, height=\the\paperheight]{titlebg.png}};
+   \fi
+  \ifnum\thepage>1\relax%
+   \node[anchor=south west,inner sep=0] at (0,0) {\includegraphics[width=\the\paperwidth, height=\the\paperheight]{pagebg.png}};
+   \node[anchor=south west] at(0.7cm,0.2cm) {\color{text}\tiny\insertframenumber};
+   \fi
+  \end{tikzpicture}
+}
+
+% Title page
+\defbeamertemplate*{title page}{sc2019}[1][]
+{
+    \vskip2cm%
+    \begin{beamercolorbox}[leftskip=0.7cm,left,#1]{title page header}
+      \centering\usebeamerfont{title}\inserttitle\par%
+    \end{beamercolorbox}%
+    \vskip0.1cm%
+    \begin{beamercolorbox}[leftskip=0.7cm,left,#1]{author}
+      \centering\usebeamerfont{author}\insertauthor%
+    \end{beamercolorbox}
+    \vspace{9cm}
+}
+
+\mode
+<all>

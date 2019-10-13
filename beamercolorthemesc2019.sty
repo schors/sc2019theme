@@ -1,0 +1,27 @@
+\mode<presentation>
+
+% Settings
+\newfontfamily{\titlefamily}{Calibri Light}
+\AtBeginDocument{\setromanfont{Times New Roman}}
+\AtBeginDocument{\setsansfont{Calibri}}
+\AtBeginDocument{\setmonofont{Courier New}}
+\setbeamercolor*{title page header}{fg=white}
+\setbeamerfont*{title}{size*={24pt}{28},family=\titlefamily}
+\setbeamercolor*{author}{fg=white}
+\setbeamerfont*{author}{size*={12pt}{12},family=\sffamily}
+\setbeamercolor*{frametitle}{fg=black}
+\setbeamerfont*{frametitle}{size*={22pt}{1},family=\titlefamily}
+\definecolor{text}{HTML}{000000}
+\setbeamercolor{normal text}{fg=text}
+\setbeamerfont{normal text}{size*={14pt}{18},family=\sffamily}
+\AtBeginDocument{\usebeamerfont{normal text}}
+
+\setbeamercolor{itemize item}{fg=text}
+\setbeamercolor{itemize subitem}{fg=text}
+\setbeamercolor{alerted text}{fg=text}
+\setbeamerfont*{itemize/enumerate subbody}{parent=itemize/enumerate body}
+\setbeamerfont*{itemize/enumerate subsubbody}{parent=itemize/enumerate subbody}
+\setbeamerfont{alerted text}{series=\bfseries}
+
+\mode
+<all>

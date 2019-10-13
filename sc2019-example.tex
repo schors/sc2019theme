@@ -1,0 +1,202 @@
+% !TeX TS-program = xelatex
+
+\documentclass[aspectratio=169]{beamer}
+
+\usepackage{xltxtra}
+\usepackage[main=russian,english]{babel}
+\defaultfontfeatures{Mapping=tex-text}
+\usepackage{listings}
+
+\usepackage[backend=biber,bibstyle=numeric,citestyle=numeric-comp,sorting=none,defernumbers=true,date=long]{biblatex}
+%\addbibresource{hl2019-example.bib}
+
+\setmainfont{Calibri}
+%\setromanfont{Times New Roman}
+%\setsansfont{Arial}
+%\setmonofont{Courier New}
+
+\usetheme{sc2019}
+
+% for biblatex
+\setbeamerfont{bibliography item}{size*={8pt}{1}}
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+\renewcommand*{\bibfont}{\fontsize{8}{1}\selectfont}
+\DeclareFieldFormat{url}{\color{blue}\url{#1}}
+
+% for listings
+\definecolor{acmebg}{HTML}{FFFFEF}
+\definecolor{acmeh}{HTML}{EFFFFF}
+\definecolor{acmec}{HTML}{8C8ACE}
+\definecolor{acmel}{HTML}{52AAAD}
+\definecolor{acmel1}{HTML}{EFEF9C}
+\definecolor{acmel2}{HTML}{9CEFEF}
+\lstset{
+        columns=flexible,
+        keepspaces=true,
+        showstringspaces=false,
+        showtabs=false,
+        tabsize=4,
+        frame=single,
+        basicstyle=\fontsize{10pt}{12}\bf\ttfamily\color{black},
+        backgroundcolor=\color{acmebg},
+        commentstyle=\color{black},
+        keywordstyle=\color{black},
+        stringstyle=\color{red},
+        rulecolor=\color{acmel},
+        framerule=1pt
+}
+
+% for listings background
+\makeatletter
+\let\old@lstKV@SwitchCases\lstKV@SwitchCases
+\def\lstKV@SwitchCases#1#2#3{}
+\makeatother
+\usepackage{lstlinebgrd}
+\makeatletter
+\let\lstKV@SwitchCases\old@lstKV@SwitchCases
+
+\lst@Key{numbers}{none}{%
+    \def\lst@PlaceNumber{\lst@linebgrd}%
+    \lstKV@SwitchCases{#1}%
+    {none:\\%
+     left:\def\lst@PlaceNumber{\llap{\normalfont
+                \lst@numberstyle{\thelstnumber}\kern\lst@numbersep}\lst@linebgrd}\\%
+     right:\def\lst@PlaceNumber{\rlap{\normalfont
+                \kern\linewidth \kern\lst@numbersep
+                \lst@numberstyle{\thelstnumber}}\lst@linebgrd}%
+    }{\PackageError{Listings}{Numbers #1 unknown}\@ehc}}
+\makeatother
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \btIfInRange{number}{range list}{TRUE}{FALSE}
+%
+% Test in int number <number> is element of a (comma separated) list of ranges
+% (such as: {1,3-5,7,10-12,14}) and processes <TRUE> or <FALSE> respectively
+
+\newcount\bt@rangea
+\newcount\bt@rangeb
+
+\newcommand\btIfInRange[2]{%
+    \global\let\bt@inrange\@secondoftwo%
+    \edef\bt@rangelist{#2}%
+    \foreach \range in \bt@rangelist {%
+        \afterassignment\bt@getrangeb%
+        \bt@rangea=0\range\relax%
+        \pgfmathtruncatemacro\result{ ( #1 >= \bt@rangea) && (#1 <= \bt@rangeb) }%
+        \ifnum\result=1\relax%
+            \breakforeach%
+            \global\let\bt@inrange\@firstoftwo%
+        \fi%
+    }%
+    \bt@inrange%
+}
+\newcommand\bt@getrangeb{%
+    \@ifnextchar\relax%
+        {\bt@rangeb=\bt@rangea}%
+        {\@getrangeb}%
+}
+\def\@getrangeb-#1\relax{%
+    \ifx\relax#1\relax%
+        \bt@rangeb=100000%   \maxdimen is too large for pgfmath
+    \else%
+        \bt@rangeb=#1\relax%
+    \fi%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \btLstHL<overlay spec>{range list}
+%
+% TODO BUG: \btLstHL commands can not yet be accumulated if more than one overlay spec match.
+% 
+\newcommand<>{\btLstHL}[1]{%
+\only#2{\btIfInRange{\value{lstnumber}}{#1}{\color{acmel1}\def\lst@linebgrdcmd{\color@block}}{\def\lst@linebgrdcmd####1####2####3{}}}%
+}%
+\makeatother
+
+% references example begin
+\usepackage{filecontents}
+\begin{filecontents}{\jobname.bib}
+@online{oleafbeamer,
+        title   = "Beamer - Overleaf, Online LaTeX Editor",
+        url     = "https://www.overleaf.com/learn/latex/Beamer"
+}
+@online{present-code,
+        author  = "Uri Nativ",
+        title   = "How to present code.",
+        year    = "2016",
+        month   = "4",
+        url     = "https://www.slideshare.net/LookAtMySlides/codeware"
+}
+\end{filecontents}
+\bibliography{\jobname}
+% references example end
+% but in real life you may use an external .bib file and \addbibresource{hl2019-example.bib}
+% be careful tha you have to run xelatex, biber, xelatex, xelatex (twice for example)
+
+\title{Шаблон презентации\\конференции\\ScalaConf 2019}
+\author{Олег Бунин}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Постановка проблемы}
+        Начните, пожалуйста, с \textbf{постановки проблемы}. Какую задачу вы решали? Почему эта задача актуальна и важна не только для вас?\\
+        ~\\
+        Почему вы думаете, что это проблема, в принципе?\\
+        ~\\
+        Не лишним будет привести числовые оценки: объёмы данных, необходимая скорость и так далее.
+\end{frame}
+
+\begin{frame}{Варианты решений}
+        Какие существуют решения вашей проблемы? Даже если вы выбрали решение, в двух словах, расскажите, пожалуйста, обо всех вариантах.\\
+        ~\\
+        По \textbf{каким критериям} и как вообще подойти к выбору? Что надо сравнивать?
+\end{frame}
+
+\begin{frame}{Варианты решений}
+        Почему вы выбрали именно то решение, что выбрали? На что надо обратить внимание вашим слушателям, чтобы сделать правильный выбор.\\
+        ~\\
+        Также важны те решения, которые вы пробовали, но они \textbf{не получились} или не получились с первого раза.
+\end{frame}
+
+\begin{frame}{Описание решения}
+        \begin{itemize}
+                \item Вот только теперь мы описываем решение, которое привело вас к результату.
+                \item Здесь важны упоминания кейсов, любое решение мы описываем максимально конкретно, мы ведь \textbf{прикладная} конференция.
+                \item И не надо миндальничать – аудитория конференции вполне профессиональна, жалеть её не нужно
+        \end{itemize}
+\end{frame}
+
+\begin{frame}{Выводы и рекомендации}
+        Наша задача не только рассказать о решении, но и облегчить задачу внедрения.\\
+        ~\\
+        Какие выводы вы могли бы сделать?\\
+        ~\\
+        С чего начать слушателям? Допустим, им нравится ваше решение, \textbf{какой их следующий шаг}?
+\end{frame}
+
+\begin{frame}[fragile]{Пример кода}
+	\begin{lstlisting}[linewidth=0.9\textwidth,basicstyle=\fontsize{16pt}{16}\bf\ttfamily\color{black},linebackgroundcolor={\btLstHL{1,6}}]
+#!/usr/bin/env scala
+
+object HelloWorld extends App {
+        println("Hello, world!")
+}
+HelloWorld.main(args) \end{lstlisting}
+\end{frame}
+
+\nocite{*}
+\setbeamertemplate{frametitle continuation}{}
+\begin{frame}[t]{Ссылки}
+\printbibliography
+\end{frame}
+
+\end{document}
+
+
